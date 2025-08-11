@@ -1,61 +1,83 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Projeto Notícias com Laravel + Vue.js
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este projeto consiste em uma aplicação web que exibe notícias da [NewsAPI](https://newsapi.org/) com frontend em Vue.js e backend em Laravel.  
+Possui um campo de busca para pesquisar notícias, e as buscas realizadas são salvas em um banco de dados SQL Server.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tecnologias usadas
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Backend: Laravel (PHP)
+- Frontend: Vue.js
+- Banco de dados: Microsoft SQL Server
+- API externa: NewsAPI (https://newsapi.org/)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Pré-requisitos
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- PHP >= 8.0
+- Composer
+- Node.js >= 14
+- NPM ou Yarn
+- Microsoft SQL Server (rodando localmente ou remoto)
+- Conta e API Key válida no [NewsAPI](https://newsapi.org/)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Como rodar o projeto localmente
 
-## Laravel Sponsors
+1. Clone o repositório
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+git clone https://github.com/juliaferreira08/NewsAPI.git
+cd NOME_DO_REPOSITORIO
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+2. Instale as dependências PHP com Composer
+composer install
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. Copie o arquivo .env.example para .env
+cp .env.example .env
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4. Banco SQL Server:
 
-## Security Vulnerabilities
+    - É necessário ter o Microsoft SQL Server instalado e rodando, seja localmente ou em um servidor remoto.
+    - Certifique-se de instalar o driver ODBC para PHP compatível com o SQL Server, para que o Laravel consiga se conectar ao banco:
+    - Para Windows: [Microsoft Drivers for PHP for SQL Server](https://learn.microsoft.com/pt-br/sql/connect/php/microsoft-php-driver-for-sql-server)
+    - Para Linux/Mac, seguir as instruções específicas do driver ODBC.
+    - No arquivo `.env`, configure as variáveis de conexão, por exemplo:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    ```env
+        DB_CONNECTION=sqlsrv
+        DB_HOST=localhost\MSSQLSERVER01
+        DB_PORT=1433
+        DB_DATABASE=nmaster
+        DB_USERNAME=usuario
+        DB_PASSWORD=senha
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+5. Gere a chave da aplicação Laravel
+php artisan key:generate
+
+
+6. Rode as migrations para criar as tabelas no banco de dados
+php artisan migrate
+
+
+7. Instale as dependências do frontend (Vue.js)
+npm install
+
+
+8. Compile os assets para desenvolvimento
+npm run dev
+
+
+9. Inicie o servidor local do Laravel
+php artisan serve
+
+
+10. Abra o navegador e acesse
+http://localhost:8000

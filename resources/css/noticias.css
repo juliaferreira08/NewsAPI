@@ -40,6 +40,7 @@
 
 .subtitulo{
     font-size: 18px;
+    margin: 1rem 0;
 }
 
 /* Noticias Destaque*/
@@ -206,6 +207,7 @@
 .tabelaHistorico{
     width: 100%;
     border: 1px solid var(--texto);
+    margin: 1rem 0;
 }
 
 .tabelaHistorico thead{
@@ -218,6 +220,11 @@
 .tabelaHistorico th, .tabelaHistorico td{
     padding: 10px;
     text-align: center;
+}
+
+.tabelaHistorico td{
+    overflow-wrap: anywhere;
+    max-width: 50px;
 }
 
 .tabelaHistorico tbody tr:nth-child(even){

@@ -27,7 +27,7 @@ class BuscaController extends Controller
     }
 
     // salva cada busca feita
-    private function salvar(Request $request)
+    public function salvar(Request $request)
     {
         try {
             Busca::create([

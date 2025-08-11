@@ -34,7 +34,7 @@
 
         try {
             const [response] = await Promise.all([
-                fetch(`https://newsapi.org/v2/everything?q=${id}&language=pt`, {
+                fetch(`https://newsapi.org/v2/everything?q="${id}"&language=pt`, {
                     method: 'GET',
                     headers: {
                         'X-Api-Key': 'd976cecbd3d24f20b2e80782bc958d79'

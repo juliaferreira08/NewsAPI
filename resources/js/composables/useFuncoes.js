@@ -17,18 +17,32 @@ export function useFuncoes() {
         }
     }
 
-    function formatarData(dataISO) {
-        const data = new Date(dataISO)
+    function formatarData(dataISO, formato = 'UTC') {
+        //const data = new Date(dataISO);
+        const data = formato === 'UTC' ? new Date(dataISO) : new Date(dataISO.replace(' ', 'T') + 'Z');
 
-        const dia = String(data.getUTCDate()).padStart(2, '0')
-        const mes = String(data.getUTCMonth() + 1).padStart(2, '0')
-        const ano = data.getUTCFullYear()
+        let dia, mes, ano;
+        let horas, minutos, segundos;
 
-        const horas = String(data.getUTCHours()).padStart(2, '0')
-        const minutos = String(data.getUTCMinutes()).padStart(2, '0')
-        const segundos = String(data.getUTCSeconds()).padStart(2, '0')
+        if(formato === 'UTC'){
+            dia = String(data.getUTCDate()).padStart(2, '0');
+            mes = String(data.getUTCMonth() + 1).padStart(2, '0');
+            ano = data.getUTCFullYear();
 
-        return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`
+            horas = String(data.getUTCHours()).padStart(2, '0');
+            minutos = String(data.getUTCMinutes()).padStart(2, '0');
+            segundos = String(data.getUTCSeconds()).padStart(2, '0');
+        } else {
+            dia = String(data.getDate()).padStart(2, '0');
+            mes = String(data.getMonth() + 1).padStart(2, '0'); 
+            ano = data.getFullYear();
+
+            horas = String(data.getHours()).padStart(2, '0');
+            minutos = String(data.getMinutes()).padStart(2, '0');
+            segundos = String(data.getSeconds()).padStart(2, '0');
+        }
+
+        return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
     }
 
     return {
