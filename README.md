@@ -61,17 +61,21 @@ php artisan key:generate
 php artisan migrate
  
  
-6. Instale as dependências do frontend (Vue.js)
+6. Criar usuário e senha no https://newsapi.org/ e jogar a API_KEY na variavel de ambiente VITE_API_TOKEN
+    - VITE_API_TOKEN=sua_api_key
+
+
+7. Instale as dependências do frontend (Vue.js)
 npm install
  
  
-7. Compile os assets para desenvolvimento
+8. Compile os assets para desenvolvimento
 npm run dev
  
  
-8. Inicie o servidor local do Laravel
+9. Inicie o servidor local do Laravel
 php artisan serve
  
  
-9. Abra o navegador e acesse
+10. Abra o navegador e acesse
 http://localhost:8000

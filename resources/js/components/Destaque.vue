@@ -23,6 +23,7 @@
     import Carregando from './Carregando.vue';
     import '../../css/noticias.css'
 
+    const token = import.meta.env.VITE_API_TOKEN;
     const dadosNoticiasDestaque = ref([]);
     const carregando = ref(true);
     const {mensagens, truncateText, tratamentoErro} = useFuncoes();
@@ -37,7 +38,7 @@
                 fetch(`https://newsapi.org/v2/everything?q=bitcoin&language=pt&sortBy=popularity&pageSize=5`, {
                     method: 'GET',
                     headers: {
-                        'X-Api-Key': 'd976cecbd3d24f20b2e80782bc958d79'
+                        'X-Api-Key': token
                     }
                 }),
             ])

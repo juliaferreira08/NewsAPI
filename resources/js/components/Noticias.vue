@@ -69,6 +69,7 @@
     import Carregando from './Carregando.vue';
     import '../../css/noticias.css';
  
+    const token = import.meta.env.VITE_API_TOKEN;
     const dadosNoticias = ref([]);
     const dadosNoticiasCompletos = ref([]);
     const carregando = ref(true);
@@ -111,7 +112,7 @@
                 fetch(`https://newsapi.org/v2/everything?q=${(descricaoFiltro.value !== '') ? descricaoFiltro.value : 'default'}&language=${idiomaFiltro.value}`, {
                     method: 'GET',
                     headers: {
-                        'X-Api-Key': '40d17b298d2943e0bb0aef9408eeb63e'
+                        'X-Api-Key': token
                     }
                 }),
             ])

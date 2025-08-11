@@ -20,6 +20,7 @@
     import { useFuncoes } from '../composables/useFuncoes';
     import '../../css/noticias.css';
 
+    const token = import.meta.env.VITE_API_TOKEN;
     const {mensagens, tratamentoErro, formatarData} = useFuncoes();
     const route = useRoute();
     const id = route.params.id;
@@ -37,7 +38,7 @@
                 fetch(`https://newsapi.org/v2/everything?q="${id}"&language=pt`, {
                     method: 'GET',
                     headers: {
-                        'X-Api-Key': 'd976cecbd3d24f20b2e80782bc958d79'
+                        'X-Api-Key': token
                     }
                 }),
             ])
