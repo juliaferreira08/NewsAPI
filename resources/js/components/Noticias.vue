@@ -149,7 +149,6 @@
             }
         })
         .catch(error => {
-            console.log(error)
             tratamentoErro(error.status, error);
         });
     }

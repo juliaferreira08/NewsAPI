@@ -54,7 +54,7 @@ cp .env.example .env
         DB_CONNECTION=sqlsrv
         DB_HOST=localhost\MSSQLSERVER01
         DB_PORT=1433
-        DB_DATABASE=nmaster
+        DB_DATABASE=master
         DB_USERNAME=usuario
         DB_PASSWORD=senha
 
