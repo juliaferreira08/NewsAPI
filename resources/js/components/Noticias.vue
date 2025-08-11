@@ -39,28 +39,28 @@
                 <option value="40">40</option>
             </select>
         </div>
-        <div><button id="filtrar" class="btn" type="button" @click="buscarDados()">Filtrar</button></div>
+        <div><button id="filtrar" class="btn" type="button" @click="buscarDados">Filtrar</button></div>
     </div>
     <Carregando v-if="carregando" />
     <!-- Listagem de Notícias -->
     <div v-if="!carregando" class="dadosNoticias">
-        <div class="conteudoNoticias" v-if="dadosNoticias.length > 0">
+        <div class="conteudoNoticias" v-if="itensFiltrados.length > 0">
             <div v-for="(item, index) in itensPaginaAtual" :key="index" :title="item.description" class="noticia">
-                <h3>{{ truncateText(item.title, 40) }}</h3>
+                <h3>{{ truncateText(item.title, 30) }}</h3>
                 <div class="conteudoImg">
                     <img :src="item.urlToImage ? item.urlToImage : '../../../public/images/semImagem.svg'" :alt="item.title" width="200" height="200"/>
                 </div>
                 <p>{{ truncateText(item.description, 65) }}</p>
-                <router-link :to="{ name: 'noticiaDetalhes', params: { id: item.title } }" class="btn">Visualizar Notícia Completa</router-link>
+                <router-link v-if="item.title" :to="{ name: 'noticiaDetalhes', params: { id: item.title } }" class="btn">Visualizar Notícia Completa</router-link>
             </div>
         </div>
-        <div class="paginacao" v-if="dadosNoticias.length > 0">
+        <div class="paginacao" v-if="itensFiltrados.length > 0">
             <button @click="paginaAtual--" :disabled="paginaAtual === 1" class="btn">Anterior</button>
             <span>Página {{ paginaAtual }} de {{ totalPaginas }}</span>
             <button @click="paginaAtual++" :disabled="paginaAtual === totalPaginas" class="btn">Próximo</button>
         </div>
     </div>
-    <div v-if="dadosNoticias.length === 0 && !carregando" class="mensagem mensagemWarning">Nenhuma notícia encontrada para os filtros aplicados.</div>
+    <div v-if="itensFiltrados.length === 0 && !carregando" class="mensagem mensagemWarning">Nenhuma notícia encontrada para os filtros aplicados.</div>
 </template>
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
 <script setup>
@@ -68,61 +68,66 @@
     import { useFuncoes } from '../composables/useFuncoes';
     import Carregando from './Carregando.vue';
     import '../../css/noticias.css';
-
+ 
     const dadosNoticias = ref([]);
+    const dadosNoticiasCompletos = ref([]);
     const carregando = ref(true);
     const totalNoticias = ref(0);
-    const descricaoFiltro = ref('bitcoin');
+    const descricaoFiltro = ref('');
     const itensPorPagina = ref(12);
     const idiomaFiltro = ref('pt');
     const {mensagens, truncateText, tratamentoErro} = useFuncoes();
-
+   
     // paginação
     const paginaAtual = ref(1);
-
-    const totalPaginas = computed(() => 
-        Math.ceil(dadosNoticias.value.length / itensPorPagina.value)
+ 
+    const totalPaginas = computed(() =>
+        Math.ceil(itensFiltrados.value.length / itensPorPagina.value)
     );
-
+ 
     const itensPaginaAtual = computed(() => {
         const start = (paginaAtual.value - 1) * itensPorPagina.value;
-        return dadosNoticias.value.slice(start, start + itensPorPagina.value);
+        return itensFiltrados.value.slice(start, start + itensPorPagina.value);
     })
-
+ 
+    const itensFiltrados = computed(() => {
+        return dadosNoticiasCompletos.value.filter(item =>
+            item.title?.toLowerCase().includes(descricaoFiltro.value.toLowerCase()) ||
+            item.description?.toLowerCase().includes(descricaoFiltro.value.toLowerCase()) ||
+            (item.content && item.content.toLowerCase().includes(descricaoFiltro.value.toLowerCase()))
+        );
+    });
+ 
     // busca notícias da API NewsAPI
     async function buscarDados() {
         mensagens.value.warning = '';
         mensagens.value.error = '';
         dadosNoticias.value = [];
-
-        if(!descricaoFiltro.value) {
-            mensagens.value.warning = 'Por favor, digite uma palavra-chave para buscar as notícias.';
-            return;
-        }
-
+ 
         carregando.value = true;
-
+ 
         try {
             const [response] = await Promise.all([
-                fetch(`https://newsapi.org/v2/everything?q=${descricaoFiltro.value}&language=${idiomaFiltro.value}`, {
+                fetch(`https://newsapi.org/v2/everything?q=${(descricaoFiltro.value !== '') ? descricaoFiltro.value : 'default'}&language=${idiomaFiltro.value}`, {
                     method: 'GET',
                     headers: {
-                        'X-Api-Key': 'd976cecbd3d24f20b2e80782bc958d79'
+                        'X-Api-Key': '40d17b298d2943e0bb0aef9408eeb63e'
                     }
                 }),
             ])
-
+ 
             const status = response.status;
             const resultado = await response.json();
-
+ 
             if(status !== 200 && status !== 'ok'){
                 tratamentoErro(status, resultado);
                 return;
             }
-
+ 
             dadosNoticias.value = resultado.articles;
             totalNoticias.value = resultado.totalResults;
-
+            dadosNoticiasCompletos.value = resultado.articles;
+ 
             salvarBusca();
         } catch (e) {
             tratamentoErro(e.status, e);
@@ -130,7 +135,7 @@
             carregando.value = false;
         }
     }
-
+ 
     // Salvar uma nova busca
     function salvarBusca() {
         fetch('/api/salvar', {
@@ -152,17 +157,17 @@
             tratamentoErro(error.status, error);
         });
     }
-
+ 
     // se alterar o idioma, a requisição na api é feita novamente
     watch(idiomaFiltro, () => {
         buscarDados()
     })
-
+ 
     // se alterar o filtro de itens por pagina, volta para a página 1
     watch(itensPorPagina, () => {
         paginaAtual.value = 1;
     })
-
+ 
     onMounted(() => {
         buscarDados();
     })
